@@ -127,10 +127,16 @@ def fileAbbr():
         journals.append(journal)
         
         # Handle a few exceptions, and call the shorten routine
-        if journal == 'Nature': 
+        if journal.upper() == 'NATURE': 
             abbreviation = "Nature"
-        elif journal == 'Science':
+        elif journal.upper() == 'NATURE':
             abbreviation = "Science"
+        elif journal.upper() == 'ARXIV':
+            abbreviation = "arXiv"
+        elif journal.upper() == 'MEDRXIV':
+            abbreviation = "medRxiv"
+        elif journal.upper() == 'BIORXIV':
+            abbreviation = "bioRxiv"
         else:
             abbreviation = shorten(journal)[1:]
         abbreviations.append(abbreviation)
