@@ -10,7 +10,7 @@ Simply download `JournalNameAbbr.py` and run it from any terminal using _python3
 Two functions are available: entering a single journal name or a file to process.  
 After the desired function is selected, follow the instructions.
 
-### Processing a bibliography file
+### Processing a references file
 The code processes bibliography files written in [.bib](https://www.bibtex.org/) style. However, I could not find a .bib parser that suited the programming needs, hence this code works with .txt files.  
 Therefore, make this **extra manual step**: copy-paste your .bib file content into a .txt, run the program, and copy-paste the output _shortBib.txt_ file back into a .bib
 
