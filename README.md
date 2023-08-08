@@ -29,7 +29,7 @@ Say you have a .bib file with the following entry:
 }
 ```
 - Copy-paste this content into a _references.txt_ file
-- In a terminal window, `>> python3 JournalNameAbbr.py`
+- In a terminal window, `>> python3 JournalNameAbbr.py` (in or with its correct path)
 - Select to get a single journal name (1) or to parse the whole references file (2)
 - If you chose 1, type the journal name
 - If you chose 2, provide the path to the _references.txt_ file
