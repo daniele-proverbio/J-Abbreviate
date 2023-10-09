@@ -16,7 +16,7 @@ def shorten(input_name, which_if_multiple = -1):
     elif input_name[0].isalpha():
         url = "https://images.webofknowledge.com/images/help/WOS/"+input_name[0].upper()+"_abrvjt.html"
     else:
-        raise Exception("Sorry, unrecognised name") 
+        raise Exception("Sorry, unrecognised name: ", input_name) 
         
     # Access the website
     request = urllib.request.Request(url)
@@ -24,7 +24,7 @@ def shorten(input_name, which_if_multiple = -1):
     try:
         response = urllib.request.urlopen(request)
     except:
-        print("something wrong")
+        print("Something wrong with Web of Knowledge website")
     
     htmlBytes = response.read()
     htmlStr = htmlBytes.decode("utf8")
@@ -37,28 +37,40 @@ def shorten(input_name, which_if_multiple = -1):
         if htmlSplit[line].find(input_name.upper()) != -1 and htmlSplit[line].find("<DT>") != -1:  # Only the names line, not already that of abbreviations
             lines.append(line)
 
-    # Handle if the are multiple entries for that journal name
+    # Handle if the are multiple entries for that journal name, or the journal name does not exist
+    skip = "-1"
     if lines:
         if which_if_multiple == -1:
             if len(lines) > 1:
                 for i in lines:
                     print(htmlSplit[i])
-                which_if_multiple = int(input("From the list above, enter the line number of the journal you want to shorten (starting from 1): ")) + 1
+                which_if_multiple = -1 + int(input(f"{input_name} multiply found. From the list above, enter the line number of the journal you want to shorten (starting from 1): "))
             else: which_if_multiple = 0
     else:
-        raise Exception("Journal not found, check the name again") 
+        skip = input(f"{input_name}: Journal not found, check the name again and restart [1] or skip this specific entry [2]: ")
+        if skip == "1":
+            exit()
+        if skip == "2":
+            print("Skipping entry")
+        if skip != "1" and skip != "2":
+            print("Invalid choice, exiting program")
+            exit()
 
     # Get the abbreviation
-    abbrv_list = htmlSplit[lines[which_if_multiple]+1].split()[1:]
-    abbrv = []
-    for i in abbrv_list:
-        abbrv.append(" ")
-        if i == "IEEE":   #exception for IEEE, all uppercase
-            abbrv.append(i)
-        else:
-            abbrv.append(i.title())
-    
-    return "".join(abbrv)
+    if skip == "-1":
+        abbrv_list = htmlSplit[lines[which_if_multiple]+1].split()[1:]
+        abbrv = []
+        for i in abbrv_list:
+            abbrv.append(" ")
+            if i == "IEEE":   #exception for IEEE, all uppercase
+                abbrv.append(i)
+            else:
+                abbrv.append(i.title())
+        
+        return "".join(abbrv)
+    elif skip == "2":
+        return "".join(input_name)
+
     
 
 def uniqueAbbr():
@@ -81,7 +93,7 @@ def fileAbbr():
 
     path_to_file = input('Enter the path to your .txt bibliography file: ')
 
-    with open(path_to_file) as f:
+    with open(path_to_file,  encoding="utf8") as f:
         contents = f.readlines()
 
     # Find whenever the bib file has a "journal" entry
